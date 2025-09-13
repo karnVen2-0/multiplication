@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Flashcards</title>
+    <style>
+        /* Basic styling for the game */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        #game-container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 320px;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        #question {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #3498db;
+        }
+
+        #answer-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+            margin-bottom: 20px;
+        }
+        
+        #answer-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        #score-display {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        #feedback {
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-height: 25px; /* Prevents layout shift */
+            margin-top: 15px;
+        }
+
+        .correct {
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            color: #e74c3c;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <h1>Multiplication Wiz! ✨</h1>
+        <p id="score-display">Score: 0</p>
+        <div id="question">5 x 8</div>
+        <input type="number" id="answer-input" placeholder="Your answer" autofocus>
+        <p id="feedback"></p>
+    </div>
+
+    <script>
+        // --- 1. GET HTML ELEMENTS ---
+        const questionEl = document.getElementById('question');
+        const answerInput = document.getElementById('answer-input');
+        const scoreDisplay = document.getElementById('score-display');
+        const feedbackEl = document.getElementById('feedback');
+
+        // --- 2. INITIALIZE GAME STATE ---
+        let score = 0;
+        let num1, num2, correctAnswer;
+
+        // --- 3. CREATE GAME FUNCTIONS ---
+
+        /** Generates a new random question and displays it. */
+        function generateQuestion() {
+            // Generate two random numbers between 1 and 10
+            num1 = Math.floor(Math.random() * 10) + 1;
+            num2 = Math.floor(Math.random() * 10) + 1;
+            
+            // Calculate the correct answer
+            correctAnswer = num1 * num2;
+            
+            // Update the question text on the page
+            questionEl.textContent = `${num1} x ${num2}`;
+
+            // Clear previous feedback and input
+            feedbackEl.textContent = '';
+            answerInput.value = '';
+        }
+
+        /** Checks the user's answer and updates the game. */
+        function checkAnswer() {
+            // Get the user's answer from the input box and convert it to a number
+            const userAnswer = parseInt(answerInput.value);
+
+            // If the input is not a number, do nothing.
+            if (isNaN(userAnswer)) {
+                return; 
+            }
+
+            // Check if the answer is correct
+            if (userAnswer === correctAnswer) {
+                score++; // Increase score
+                feedbackEl.textContent = 'Correct! 🎉';
+                feedbackEl.className = 'correct';
+            } else {
+                feedbackEl.textContent = `Wrong! The answer was ${correctAnswer}.`;
+                feedbackEl.className = 'incorrect';
+            }
+
+            // Update the score display on the page
+            scoreDisplay.textContent = `Score: ${score}`;
+
+            // Generate the next question after a short delay
+            setTimeout(generateQuestion, 1200);
+        }
+
+        // --- 4. ADD EVENT LISTENER ---
+
+        // Listen for the "Enter" key being pressed in the input box
+        answerInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // --- 5. START THE GAME ---
+        
+        // Generate the first question when the page loads
+        generateQuestion();
+
+    </script>
+</body>
+</html>
